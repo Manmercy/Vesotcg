@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0b0c" />
+  <meta name="description" content="VERSO — where your TCG story lives." />
+  <link rel="icon" type="image/png" href="./public/assets/verso-logo-dark-ui-v2.png" />
+  <title>VERSO — TCG Tracker</title>
+  <link rel="stylesheet" href="./app/globals.css?v=1.6" />
+</head>
+<body>
+<main class="app-shell">
+  <aside class="rail" aria-label="Desktop navigation">
+    <button class="brand bare" data-screen="home" aria-label="VERSO home"><span class="brand-guide-logo"></span></button>
+    <nav class="rail-nav">
+      <button class="active" data-screen="home"><span class="icon">⌂</span><span>Home</span></button>
+      <button data-screen="explore"><span class="icon">⌖</span><span>Explore</span></button>
+      <button data-screen="passport"><span class="icon">▦</span><span>Passport</span></button>
+      <button data-screen="profile"><span class="icon">●</span><span>Profile</span></button>
+    </nav>
+    <button class="record-btn" data-action="create"><span>＋</span> Create activity</button>
+    <div class="rail-bottom"><button><span class="icon">⚙</span><span>Settings</span></button></div>
+  </aside>
+
+  <section class="feed" id="main-view">
+    <header class="mobile-header">
+      <button class="brand compact bare" data-screen="home" aria-label="VERSO home"><span class="brand-guide-logo"></span></button>
+      <button class="notify-btn" data-screen="notifications" aria-label="Notifications"><span class="bell-icon">●</span><i>2</i></button>
+    </header>
+    <div class="feed-head"><div><p class="eyebrow">FRIDAY, 28 AUGUST</p><h1>Good evening, Manny<span>✦</span></h1><p>Ready to add another page to your TCG story?</p></div><button class="avatar manny" data-screen="profile" aria-label="Open Manny profile">Manny</button></div>
+    <div class="feed-tabs" role="tablist"><button class="active">Following</button><button>Local</button><button>Global</button></div>
+
+    <div id="activity-feed" class="activity-feed" aria-live="polite"></div>
+    <div class="feed-end"><span>✦</span> WHERE YOUR TCG STORY LIVES.</div>
+  </section>
+
+  <aside class="right-panel">
+    <div class="desktop-top-actions"><button data-screen="notifications" aria-label="Notifications"><span class="bell-icon">●</span><strong>2</strong></button></div>
+    <section class="journey-card streak-widget"><div class="section-title"><div><p>PLAY STREAK</p><h2>4 weeks active</h2></div><button data-screen="profile">Stats →</button></div><div class="streak-summary"><span class="streak-fire-card" aria-hidden="true"><i>▱</i><b>🔥</b></span><strong>12</strong><span>matches this week<small>Best streak · 9 weeks</small></span></div><div class="calendar-month"><strong>August 2026</strong><small>● match&nbsp;&nbsp;◆ event&nbsp;&nbsp;✦ badge</small></div><div class="mini-calendar" aria-label="August 2026 activity calendar"><div class="week-labels"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="heat-grid" data-calendar></div></div></section>
+    <section class="right-section"><div class="section-title"><div><p>HAPPENING NOW</p><h2>Near you</h2></div><button data-screen="explore">Map →</button></div><button class="event-row" data-screen="event"><span class="date-chip"><b>28</b>AUG</span><span><strong>One Piece Weekly</strong><small>Mana House · 18 players</small><span class="tiny-attendees"><i class="avatar manny">M</i><i class="avatar poom">P</i><i class="avatar may">M</i></span></span><i>›</i></button><button class="event-row" data-screen="event"><span class="date-chip alt"><b>30</b>AUG</span><span><strong>Pokémon League Night</strong><small>Side Deck · 12 going</small></span><i>›</i></button></section>
+    <section class="right-section"><div class="section-title"><div><p>ALMOST THERE</p><h2>Next badge</h2></div></div><div class="badge-body"><span class="badge-shape">✦<small>10</small></span><div><strong>Community Builder</strong><p>Meet 2 more players to unlock.</p><div class="progress"><i style="width:80%"></i></div><small>8 / 10 players</small></div></div></section>
+  </aside>
+
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <button class="active" data-screen="home"><span class="icon">⌂</span><span>Home</span></button>
+    <button data-screen="explore"><span class="icon">⌖</span><span>Explore</span></button>
+    <button class="create-fab" data-action="create" aria-label="Create activity"><span class="icon">＋</span><span>Create</span></button>
+    <button data-screen="passport"><span class="icon">▦</span><span>Passport</span></button>
+    <button data-screen="profile"><span class="icon">●</span><span>Profile</span></button>
+  </nav>
+</main>
+<div id="overlay-root"></div><div id="toast" role="status" aria-live="polite"></div>
+<script src="./app.js?v=1.6"></script>
+</body>
+</html>
