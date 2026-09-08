@@ -1,0 +1,249 @@
+/* VERSO v1.9.4 badge-only rendering pass.
+   Canonical sprite cells stay untouched; records without approved art use a
+   badge-specific temporary graphic instead of borrowing another badge. */
+.badge-art{
+  position:relative!important;
+  display:grid!important;
+  width:112px;
+  min-width:0;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:2/3!important;
+  flex:0 0 auto!important;
+  place-items:center;
+  margin-inline:auto;
+  overflow:hidden;
+  background-repeat:no-repeat!important;
+  transform:none;
+  isolation:isolate;
+}
+
+.badge-art-sprite{
+  background-image:url('../public/assets/verso-badge-sticker-sprite-v3.webp')!important;
+  background-size:300% 200%!important;
+  border:0!important;
+  border-radius:0!important;
+}
+.badge-art-sprite.first{background-position:0 0!important}
+.badge-art-sprite.grail{background-position:50% 0!important}
+.badge-art-sprite.local{background-position:100% 0!important}
+.badge-art-sprite.tourist{background-position:0 100%!important}
+.badge-art-sprite.owl{background-position:100% 100%!important}
+
+.badge-art-placeholder{
+  --badge-accent:#ff9b35;
+  --badge-accent-2:#ff4da8;
+  grid-template-rows:18px 1fr auto auto 16px;
+  padding:10px 8px 8px;
+  border:2px solid color-mix(in srgb,var(--badge-accent) 75%,#fff 25%);
+  border-radius:18% 18% 25% 25% / 12% 12% 18% 18%;
+  background-image:
+    radial-gradient(circle at 50% 31%,color-mix(in srgb,var(--badge-accent) 34%,transparent),transparent 38%),
+    repeating-conic-gradient(from 0deg at 50% 38%,color-mix(in srgb,var(--badge-accent) 10%,transparent) 0 8deg,transparent 8deg 20deg),
+    linear-gradient(155deg,#242026,#0d0d0f 68%)!important;
+  box-shadow:inset 0 0 0 4px #0d0d0f,inset 0 0 0 5px color-mix(in srgb,var(--badge-accent) 40%,transparent),0 13px 24px #0008;
+  color:#fff8e8;
+  font-style:normal;
+  text-align:center;
+}
+.badge-art-placeholder:before{
+  content:'';
+  position:absolute;
+  z-index:-1;
+  inset:8px;
+  border:1px dashed color-mix(in srgb,var(--badge-accent) 44%,transparent);
+  border-radius:14% 14% 22% 22% / 10% 10% 15% 15%;
+}
+.badge-art-placeholder:after{
+  content:'';
+  position:absolute;
+  z-index:-1;
+  left:12%;right:12%;top:44%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--badge-accent),transparent);
+  box-shadow:0 29px 0 color-mix(in srgb,var(--badge-accent) 28%,transparent);
+}
+.badge-art-placeholder>.badge-placeholder-spark{
+  justify-self:end;
+  color:var(--badge-accent-2);
+  font-size:14px;
+  font-style:normal;
+  line-height:1;
+}
+.badge-art-placeholder>em{
+  display:grid;
+  width:42px;height:42px;
+  place-items:center;
+  border:1px solid color-mix(in srgb,var(--badge-accent) 60%,#fff 40%);
+  border-radius:50%;
+  background:#0c0c0ecc;
+  color:var(--badge-accent);
+  font-size:21px;
+  font-style:normal;
+  box-shadow:0 0 22px color-mix(in srgb,var(--badge-accent) 36%,transparent);
+}
+.badge-art-placeholder>b{
+  align-self:end;
+  max-width:100%;
+  color:#fff8e8;
+  font-size:10px!important;
+  font-weight:780!important;
+  letter-spacing:.035em;
+  line-height:1.08;
+  overflow-wrap:anywhere;
+  text-transform:uppercase;
+}
+.badge-art-placeholder>small{
+  margin:3px 0 0!important;
+  color:var(--badge-accent)!important;
+  font-size:7px!important;
+  font-weight:760!important;
+  letter-spacing:.11em!important;
+  line-height:1!important;
+  text-transform:uppercase!important;
+}
+.badge-art-placeholder>span{
+  align-self:end;
+  color:#fff8e8;
+  font-size:11px;
+  font-weight:850;
+  line-height:1;
+}
+
+.badge-art-placeholder[data-badge-category="Play"]{--badge-accent:#ff9c35;--badge-accent-2:#ff4d73}
+.badge-art-placeholder[data-badge-category="Deck / Brewer"]{--badge-accent:#ffcc4b;--badge-accent-2:#ff7a36}
+.badge-art-placeholder[data-badge-category="Competitive"]{--badge-accent:#f6c96a;--badge-accent-2:#ff515e}
+.badge-art-placeholder[data-badge-category="Collector"]{--badge-accent:#9a7cff;--badge-accent-2:#ff4dac}
+.badge-art-placeholder[data-badge-category="Community"]{--badge-accent:#ff6f9f;--badge-accent-2:#ffc34b}
+.badge-art-placeholder[data-badge-category="Events"]{--badge-accent:#ff7655;--badge-accent-2:#b68cff}
+.badge-art-placeholder[data-badge-category="Lifestyle"]{--badge-accent:#7e9fff;--badge-accent-2:#ffc658}
+.badge-art-placeholder[data-badge-category="Shop / Journey"]{--badge-accent:#6ed7bd;--badge-accent-2:#ff9b35}
+.badge-art-placeholder[data-badge-category="Marketplace"]{--badge-accent:#68c9ff;--badge-accent-2:#ff9d38}
+.badge-art-placeholder[data-badge-category="VERSO Special"]{--badge-accent:#ff4da8;--badge-accent-2:#ffc64a}
+.badge-art-placeholder[data-badge-category="Partner Shop"]{--badge-accent:#ffad3d;--badge-accent-2:#73d7be}
+
+/* Feed achievement */
+.journey-badge-hero .badge-art,
+.social-session-card .journey-badge-hero .badge-art{
+  position:relative!important;
+  inset:auto!important;
+  width:142px!important;
+  height:auto!important;
+  min-height:0!important;
+  flex-basis:auto!important;
+  margin:0 auto!important;
+}
+.journey-badge-hero .badge-art-placeholder>b{font-size:12px!important}
+.journey-badge-hero .badge-art-placeholder>small{font-size:8px!important}
+
+/* Badge detail and achievement-post detail */
+.badge-detail-v193 .badge-art.hero{
+  width:172px!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0 auto 12px!important;
+}
+.single-badge-detail .badge-art{
+  width:190px!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:auto!important;
+}
+.badge-detail-v193 .badge-art-placeholder>b,
+.single-badge-detail .badge-art-placeholder>b{font-size:13px!important}
+.badge-detail-v193 .badge-art-placeholder>small,
+.single-badge-detail .badge-art-placeholder>small{font-size:8px!important}
+
+/* Profile collection and pinned identity */
+.badge-art-grid{
+  align-items:stretch!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+.badge-art-grid>button{
+  min-width:0!important;
+  min-height:270px!important;
+  justify-content:flex-start!important;
+  padding:16px 10px 13px!important;
+}
+.badge-art-grid .badge-art{
+  width:112px!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0 auto 10px!important;
+}
+.badge-art-grid>button>strong{font-size:13px!important;line-height:1.25!important}
+.badge-art-grid>button>small{font-size:9px!important;line-height:1.35!important;text-align:center!important}
+.badge-art-grid>button>i{margin-top:7px;color:#aaa49c;font-size:9px;font-style:normal;line-height:1.3;text-align:center}
+.badge-art-grid>button.locked .badge-art{filter:grayscale(.78) brightness(.46)!important;opacity:.72!important}
+.badge-art-grid>button.locked:after{top:84px!important;left:50%!important;transform:translateX(-50%)!important}
+
+.profile-layout-panel .pinned-badges>div>button{
+  min-height:245px!important;
+  padding:15px 10px!important;
+}
+.profile-layout-panel .pinned-badges .badge-art{
+  width:92px!important;
+  height:auto!important;
+  min-height:0!important;
+  flex-basis:auto!important;
+  margin:0 auto 7px!important;
+}
+
+/* Session-earned references */
+.session-earned>div{align-items:stretch}
+.session-earned button{
+  grid-template-columns:58px minmax(0,1fr)!important;
+  min-width:210px!important;
+}
+.session-earned .badge-art.mini{
+  grid-row:1/3;
+  width:52px!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+}
+.session-earned .badge-art-placeholder{padding:5px 4px 4px;border-radius:10px}
+.session-earned .badge-art-placeholder>em{width:22px;height:22px;font-size:12px}
+.session-earned .badge-art-placeholder>b{font-size:5px!important}
+.session-earned .badge-art-placeholder>small{font-size:4px!important}
+.session-earned .badge-art-placeholder>.badge-placeholder-spark{font-size:7px}
+.session-earned .badge-art-placeholder>span{font-size:7px}
+
+/* Compact surfaces */
+.badge-art-button{display:grid;place-items:center;padding:0;border:0;background:transparent}
+.badge-body .badge-art,
+.market-reward .badge-art{
+  width:68px!important;
+  height:auto!important;
+  min-height:0!important;
+}
+.badge-body .badge-art-placeholder,
+.market-reward .badge-art-placeholder{padding:5px 4px 4px;border-radius:10px}
+.badge-body .badge-art-placeholder>em,
+.market-reward .badge-art-placeholder>em{width:26px;height:26px;font-size:13px}
+.badge-body .badge-art-placeholder>b,
+.market-reward .badge-art-placeholder>b{font-size:6px!important}
+.badge-body .badge-art-placeholder>small,
+.market-reward .badge-art-placeholder>small{font-size:4px!important}
+.share-single-badge.badge-art{width:126px!important;height:auto!important;min-height:0!important}
+
+@media(max-width:860px){
+  .journey-badge-hero .badge-art,
+  .social-session-card .journey-badge-hero .badge-art{width:126px!important;height:auto!important}
+  .single-badge-detail{grid-template-columns:150px minmax(0,1fr)!important;padding:22px!important}
+  .single-badge-detail .badge-art{width:138px!important;height:auto!important}
+  .badge-detail-v193 .badge-art.hero{width:142px!important;height:auto!important}
+}
+
+@media(max-width:520px){
+  .badge-art-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .badge-art-grid>button{min-height:245px!important;padding:13px 7px 11px!important}
+  .badge-art-grid .badge-art{width:96px!important;height:auto!important}
+  .profile-layout-panel .pinned-badges>div{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .profile-layout-panel .pinned-badges>div>button{min-height:222px!important}
+  .profile-layout-panel .pinned-badges .badge-art{width:84px!important;height:auto!important}
+  .single-badge-detail{grid-template-columns:118px minmax(0,1fr)!important;gap:14px!important;padding:17px!important}
+  .single-badge-detail .badge-art{width:112px!important;height:auto!important}
+  .single-badge-detail>div strong{font-size:24px!important;line-height:1.05!important}
+  .badge-detail-v193 .badge-art.hero{width:132px!important;height:auto!important}
+}

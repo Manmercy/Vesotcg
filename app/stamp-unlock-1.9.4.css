@@ -1,0 +1,133 @@
+/* Feed-only presentation for Partner Shop stamp unlock moments. */
+.social-session-card .feed-stamp-unlock{
+  position:relative;
+  isolation:isolate;
+  display:flex!important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:20px!important;
+  text-align:center!important;
+  background:
+    radial-gradient(circle at 50% 43%,rgba(255,194,76,.20) 0,rgba(255,138,46,.10) 28%,transparent 57%),
+    radial-gradient(circle at 50% 92%,rgba(255,77,168,.10),transparent 40%),
+    linear-gradient(155deg,#171315 0%,#101012 52%,#1a1214 100%)!important;
+  border-color:rgba(255,181,84,.36)!important;
+}
+
+.social-session-card .feed-stamp-unlock:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:min(58%,270px);
+  aspect-ratio:1;
+  border:1px solid rgba(255,190,77,.16);
+  border-radius:50%;
+  box-shadow:0 0 0 18px rgba(255,151,52,.025),0 0 0 44px rgba(255,77,168,.018);
+}
+
+.social-session-card .feed-stamp-unlock .stamp-energy{
+  left:50%!important;
+  top:45%!important;
+  width:min(46%,220px)!important;
+  height:auto!important;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%)!important;
+  opacity:.58;
+  border-color:rgba(255,200,61,.34);
+  box-shadow:0 0 46px rgba(255,138,46,.20),inset 0 0 38px rgba(255,77,168,.10);
+}
+
+.social-session-card .feed-stamp-unlock .stamp-partner-label{
+  position:relative;
+  z-index:2;
+  color:var(--orange);
+  font-size:11px;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:.16em;
+}
+
+.social-session-card .feed-stamp-unlock .passport-stamp{
+  position:relative;
+  z-index:2;
+  flex:0 0 auto;
+  width:clamp(132px,31%,172px)!important;
+  height:auto!important;
+  aspect-ratio:1;
+  margin:2px auto 0;
+  border-width:2px;
+  background:radial-gradient(circle at 40% 32%,#382719,#211710 62%,#161214);
+  filter:drop-shadow(0 18px 20px rgba(0,0,0,.55));
+  box-shadow:inset 0 0 0 5px rgba(255,181,84,.035),0 0 28px rgba(255,146,47,.14);
+  animation:stampFloat 3.4s ease-in-out infinite;
+}
+
+.social-session-card .feed-stamp-unlock .passport-stamp b{font-size:clamp(25px,5vw,36px)}
+.social-session-card .feed-stamp-unlock .passport-stamp strong{font-size:clamp(10px,1.8vw,13px)}
+.social-session-card .feed-stamp-unlock .passport-stamp small{font-size:clamp(7px,1.25vw,9px)}
+
+.social-session-card .feed-stamp-unlock .stamp-unlock-copy{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  text-align:center;
+}
+
+.social-session-card .feed-stamp-unlock .stamp-unlock-copy>strong{
+  margin:0;
+  color:var(--cream);
+  font-size:clamp(17px,2.7vw,23px);
+  font-weight:700;
+  line-height:1.1;
+  letter-spacing:.06em;
+}
+
+.social-session-card .feed-stamp-unlock .stamp-unlock-copy>b{
+  color:var(--yellow);
+  font-size:clamp(13px,2vw,16px);
+  font-weight:650;
+}
+
+.social-session-card .feed-stamp-unlock .stamp-unlock-copy>p{
+  margin:0;
+  color:#bdb5aa;
+  font-size:clamp(10px,1.5vw,12px);
+}
+
+.social-session-card .feed-stamp-unlock .stamp-spark{
+  position:absolute;
+  z-index:2;
+  color:var(--pink);
+  font-size:16px;
+  font-style:normal;
+  filter:drop-shadow(0 0 8px rgba(255,77,168,.30));
+  animation:premiumSpark 2.8s ease-in-out infinite;
+}
+.social-session-card .feed-stamp-unlock .spark-one{left:22%;top:24%}
+.social-session-card .feed-stamp-unlock .spark-two{right:21%;top:38%;color:var(--yellow);font-size:12px;animation-delay:-1.2s}
+
+@media(max-width:760px){
+  .social-session-card .feed-stamp-unlock{gap:6px;padding:12px!important}
+  .social-session-card .feed-stamp-unlock:before{width:52%}
+  .social-session-card .feed-stamp-unlock .stamp-energy{width:45%!important}
+  .social-session-card .feed-stamp-unlock .stamp-partner-label{font-size:8px;letter-spacing:.14em}
+  .social-session-card .feed-stamp-unlock .passport-stamp{width:clamp(96px,34%,116px)!important;margin:0 auto}
+  .social-session-card .feed-stamp-unlock .passport-stamp b{font-size:24px}
+  .social-session-card .feed-stamp-unlock .passport-stamp strong{font-size:9px}
+  .social-session-card .feed-stamp-unlock .passport-stamp small{font-size:6px}
+  .social-session-card .feed-stamp-unlock .stamp-unlock-copy>strong{font-size:16px}
+  .social-session-card .feed-stamp-unlock .stamp-unlock-copy>b{font-size:12px}
+  .social-session-card .feed-stamp-unlock .stamp-unlock-copy>p{font-size:9px}
+  .social-session-card .feed-stamp-unlock .spark-one{left:17%;top:24%}
+  .social-session-card .feed-stamp-unlock .spark-two{right:16%;top:38%}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .social-session-card .feed-stamp-unlock .passport-stamp,
+  .social-session-card .feed-stamp-unlock .stamp-spark{animation:none!important}
+}

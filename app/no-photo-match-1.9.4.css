@@ -1,0 +1,84 @@
+/* Feed-only composition for Match sessions without an uploaded photo. */
+.social-session-card .minimal-duel-graphic{
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+  gap:clamp(22px,4.5vw,38px)!important;
+  padding:clamp(24px,5%,36px)!important;
+}
+
+.social-session-card .minimal-duel-graphic .duel-card-back{
+  width:min(100%,190px)!important;
+  min-width:0;
+  border-width:3px;
+  border-radius:13px;
+  box-shadow:0 28px 45px rgba(0,0,0,.62),inset 0 0 0 9px #100d0d,0 0 30px rgba(255,151,53,.12);
+}
+
+.social-session-card .minimal-duel-graphic .duel-card-back.left{justify-self:end}
+.social-session-card .minimal-duel-graphic .duel-card-back.right{
+  justify-self:start;
+  box-shadow:0 28px 45px rgba(0,0,0,.62),inset 0 0 0 9px #100d0d,0 0 30px rgba(159,133,255,.14);
+}
+
+.social-session-card .minimal-duel-graphic .duel-card-back i{
+  width:clamp(62px,8vw,76px);
+  height:clamp(62px,8vw,76px);
+  font-size:clamp(31px,4vw,39px);
+}
+
+.social-session-card .minimal-duel-graphic>b{
+  position:relative;
+  z-index:2;
+  font-size:clamp(36px,5vw,48px)!important;
+  line-height:1;
+  text-shadow:0 8px 22px rgba(0,0,0,.72),0 0 22px rgba(255,255,255,.13);
+}
+
+.social-session-card .minimal-duel-graphic>em{
+  left:14px;
+  top:14px;
+  padding:6px 10px;
+  font-size:10px;
+}
+
+.social-session-card .minimal-duel-graphic:after{
+  inset:11%!important;
+  opacity:.78;
+}
+
+@media(max-width:520px){
+  .social-session-card .minimal-duel-graphic{
+    grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr)!important;
+    gap:10px!important;
+    padding:22px 14px 16px!important;
+  }
+  .social-session-card .minimal-duel-graphic .duel-card-back{
+    width:min(100%,104px)!important;
+    border-width:2px;
+    border-radius:10px;
+    box-shadow:0 18px 28px rgba(0,0,0,.58),inset 0 0 0 6px #100d0d,0 0 20px rgba(255,151,53,.10);
+  }
+  .social-session-card .minimal-duel-graphic .duel-card-back.right{
+    box-shadow:0 18px 28px rgba(0,0,0,.58),inset 0 0 0 6px #100d0d,0 0 20px rgba(159,133,255,.12);
+  }
+  .social-session-card .minimal-duel-graphic .duel-card-back i{
+    width:46px;
+    height:46px;
+    font-size:25px;
+  }
+  .social-session-card .minimal-duel-graphic>b{font-size:27px!important}
+  .social-session-card .minimal-duel-graphic>em{
+    left:10px;
+    top:10px;
+    max-width:calc(100% - 20px);
+    overflow:hidden;
+    padding:5px 8px;
+    font-size:8px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .social-session-card .minimal-duel-graphic:after{inset:8%!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .social-session-card .minimal-duel-graphic .duel-card-back{animation:none!important}
+}
