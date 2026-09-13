@@ -107,3 +107,171 @@
   .profile-layout-panel .profile-main-copy h2{font-size:26px!important}
   .profile-layout-panel .pinned-badges>div{grid-template-columns:1fr!important}
 }
+
+/* V1.9.5 Profile calendar readability. Scoped to Profile only. */
+.profile-layout-panel .profile-calendar .calendar-day{
+  border-color:#45413e!important;
+  background:#19191b!important;
+  color:#d8d2c9!important;
+}
+.profile-layout-panel .profile-calendar .calendar-day>span{
+  position:relative!important;
+  inset:auto!important;
+  z-index:2!important;
+  color:#d8d2c9!important;
+  font-size:22px!important;
+  font-weight:620!important;
+  line-height:1!important;
+  transform:none!important;
+}
+.profile-layout-panel .profile-calendar button.calendar-day.has-activity{
+  border-color:#8f5b32!important;
+  background:linear-gradient(145deg,#2b211b,#1d1918)!important;
+  box-shadow:inset 0 0 0 1px #ff9a3814!important;
+}
+.profile-layout-panel .profile-calendar button.calendar-day.has-activity>span{
+  color:#fff7e6!important;
+  font-weight:720!important;
+}
+.profile-layout-panel .profile-calendar .activity-dot{
+  top:6px!important;
+  right:6px!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:8px!important;
+  height:8px!important;
+  border:1.5px solid #121214!important;
+  transform:none!important;
+}
+
+@media(max-width:520px){
+  .profile-layout-panel .profile-calendar .calendar-day>span{
+    font-size:18px!important;
+  }
+  .profile-layout-panel .profile-calendar .activity-dot{
+    top:4px!important;
+    right:4px!important;
+    width:7px!important;
+    height:7px!important;
+  }
+}
+
+@media(max-width:400px){
+  .profile-layout-panel .strava-calendar .profile-calendar{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+  .profile-layout-panel .profile-calendar .calendar-day{
+    min-width:0!important;
+  }
+  .profile-layout-panel .profile-calendar .calendar-day>span{
+    font-size:17px!important;
+    transform:translateY(2px)!important;
+  }
+  .profile-layout-panel .profile-calendar .activity-dot{
+    top:3px!important;
+    right:auto!important;
+    left:50%!important;
+    width:6px!important;
+    height:6px!important;
+    transform:translateX(-50%)!important;
+  }
+}
+
+/* V1.9.6 Profile action controls. Scoped to current and public Profile headers. */
+.profile-layout-panel .profile-actions.polished-actions{
+  position:relative!important;
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+}
+.profile-layout-panel .profile-actions.polished-actions>button.profile-action-button{
+  display:flex!important;
+  width:auto!important;
+  min-width:0!important;
+  height:44px!important;
+  min-height:44px!important;
+  flex:0 1 auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  padding:0 12px!important;
+  border:1px solid #45413e!important;
+  border-radius:10px!important;
+  background:#1a191b!important;
+  color:#f5efe5!important;
+}
+.profile-layout-panel .profile-action-button svg,
+.profile-layout-panel .profile-follow-button svg,
+.profile-layout-panel .profile-follow-menu svg{
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.profile-layout-panel .profile-actions.polished-actions b{
+  display:inline!important;
+  margin:0!important;
+  color:inherit!important;
+  font-size:13px!important;
+  font-weight:650!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+.profile-layout-panel .profile-action-button:hover,
+.profile-layout-panel .profile-action-button:focus-visible{
+  border-color:#ff9a38!important;
+  background:#251d19!important;
+  color:#fff7e6!important;
+}
+.profile-layout-panel .profile-follow-control{position:relative;display:block}
+.profile-layout-panel .profile-follow-button{
+  display:flex!important;
+  min-width:124px!important;
+  min-height:46px!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  padding:0 16px!important;
+  border-radius:11px!important;
+}
+.profile-layout-panel .profile-follow-button.is-follow{border:0!important;background:linear-gradient(110deg,#ffc83d,#ff4da8)!important;color:#111!important;box-shadow:0 9px 24px #ff7b3424!important}
+.profile-layout-panel .profile-follow-button.is-following{border:1px solid #57514b!important;background:#211f20!important;color:#fff7e6!important}
+.profile-layout-panel .profile-follow-button.is-following:hover{border-color:#8a7d72!important;background:#292627!important}
+.profile-layout-panel .profile-follow-button>span{color:#79d7a8!important;font-size:13px!important;font-weight:800!important}
+.profile-layout-panel .profile-follow-menu{
+  position:absolute;
+  z-index:12;
+  top:calc(100% + 8px);
+  right:0;
+  width:150px;
+  padding:6px;
+  border:1px solid #45413e;
+  border-radius:11px;
+  background:#1b191a;
+  box-shadow:0 16px 36px #0009;
+}
+.profile-layout-panel .profile-follow-menu>button{display:flex;width:100%;min-height:42px;align-items:center;gap:9px;padding:0 10px;border:0;border-radius:8px;background:transparent;color:#d8d2c9;text-align:left}
+.profile-layout-panel .profile-follow-menu>button:hover,.profile-layout-panel .profile-follow-menu>button:focus-visible{background:#282526;color:#fff7e6}
+.profile-layout-panel .profile-follow-menu b{display:inline!important;font-size:13px!important;font-weight:600!important}
+
+@media(max-width:860px){
+  .profile-layout-panel .profile-actions.polished-actions{grid-column:1/-1!important;justify-content:flex-start!important;width:100%!important}
+  .profile-layout-panel .profile-actions.polished-actions>button.profile-action-button{flex:1 1 0!important}
+  .profile-layout-panel .profile-follow-control{width:100%}
+  .profile-layout-panel .profile-follow-button{width:100%!important;max-width:180px!important}
+  .profile-layout-panel .profile-follow-menu{left:0;right:auto}
+}
+
+@media(max-width:400px){
+  .profile-layout-panel .profile-actions.polished-actions{gap:6px!important}
+  .profile-layout-panel .profile-actions.polished-actions>button.profile-action-button{height:46px!important;padding:0 7px!important;gap:6px!important}
+  .profile-layout-panel .profile-action-button svg{width:16px!important;height:16px!important;flex-basis:16px!important}
+  .profile-layout-panel .profile-actions.polished-actions b{font-size:11.5px!important}
+}

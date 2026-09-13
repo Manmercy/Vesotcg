@@ -29,6 +29,14 @@ const escapeText = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&am
 const badgeCategoryIcon = category => ({
   Play:'⚔','Deck / Brewer':'▱',Competitive:'♛',Collector:'✦',Community:'♡',Events:'◇',Lifestyle:'☾','Shop / Journey':'⌖',Marketplace:'↔','VERSO Special':'V','Partner Shop':'⌖'
 }[category] || '✦');
+const profileActionIcon = name => ({
+  edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>',
+  qr:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="3" width="6" height="6" rx="1"/><rect x="3" y="15" width="6" height="6" rx="1"/><path d="M15 15h2v2h-2zM19 15h2v6h-6v-2M15 19h2"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.1A1.7 1.7 0 0 0 4.6 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.5 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.36.7.66.96.3.26.68.4 1.08.4H21v4h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg>',
+  follow:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2.5 21v-2a5 5 0 0 1 5-5h3a5 5 0 0 1 3.7 1.6M19 8v6M22 11h-6"/></svg>',
+  following:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>',
+  unfollow:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2.5 21v-2a5 5 0 0 1 5-5h3a5 5 0 0 1 3.7 1.6M17 11h5"/></svg>'
+}[name] || '');
 const badgeArtwork = (badge, extra = '') => {
   if (!badge) return '';
   const placeholder=String(badge.artwork || '').startsWith('ph-');
@@ -64,13 +72,13 @@ const cardPullGraphic = (item) => `<button class="card-pull-graphic bare wide" d
 const mediaCarousel = (item) => `<section class="activity-carousel" aria-label="${item.title} photo carousel"><button class="carousel-arrow prev" data-action="carousel-prev" aria-label="Previous photo">‹</button><div class="carousel-track">${item.gallery.map((media,index)=>`<button class="carousel-slide media-${media} ${index===0?'active':''}" data-action="gallery-open" data-index="${index}" aria-label="Open photo ${index+1} of ${item.gallery.length}"></button>`).join('')}</div><button class="carousel-arrow next" data-action="carousel-next" aria-label="Next photo">›</button><div class="carousel-dots">${item.gallery.map((_,index)=>`<button class="${index===0?'active':''}" data-action="carousel-go" data-index="${index}" aria-label="Show photo ${index+1}"></button>`).join('')}</div></section>`;
 
 const eventFeedCarousel = (item) => {
-  const gallery=db.events[item.eventId]?.gallery || [];
-  return `<section class="activity-carousel event-feed-carousel" aria-label="${item.title} event photo carousel"><button class="carousel-arrow prev" data-action="carousel-prev" aria-label="Previous event photo">‹</button><div class="carousel-track">${gallery.map((media,index)=>`<button class="carousel-slide media-${media} ${index===0?'active':''}" data-action="open-event" data-event-id="${item.eventId}" data-index="${index}" aria-label="Open ${item.title} event details from photo ${index+1} of ${gallery.length}"></button>`).join('')}</div><button class="carousel-arrow next" data-action="carousel-next" aria-label="Next event photo">›</button><div class="carousel-dots">${gallery.map((_,index)=>`<button class="${index===0?'active':''}" data-action="carousel-go" data-index="${index}" aria-label="Show event photo ${index+1}"></button>`).join('')}</div></section>`;
+  const gallery=item.imageIds || [];
+  return `<section class="activity-carousel event-feed-carousel" aria-label="${item.title} post photo carousel"><button class="carousel-arrow prev" data-action="carousel-prev" aria-label="Previous post photo">‹</button><div class="carousel-track">${gallery.map((media,index)=>`<button class="carousel-slide media-${media} ${index===0?'active':''}" data-action="activity-detail" data-activity="${item.id}" data-index="${index}" aria-label="Open ${userById(item.authorUserId).name}'s post from photo ${index+1} of ${gallery.length}"></button>`).join('')}</div><button class="carousel-arrow next" data-action="carousel-next" aria-label="Next post photo">›</button><div class="carousel-dots">${gallery.map((_,index)=>`<button class="${index===0?'active':''}" data-action="carousel-go" data-index="${index}" aria-label="Show post photo ${index+1}"></button>`).join('')}</div></section>`;
 };
 
 const journeyMedia = (item) => {
   if (item.type === 'badge') { const badge=db.badges[item.badgeId]; return `<button class="journey-badge-hero bare wide" data-action="activity-detail" data-activity="${item.id}"><span class="badge-aura"></span>${badgeArtwork(badge,'feed-badge-art')}<div><small>${item.eyebrow}</small><strong>${badge?.name || item.title}</strong><p>${badge?.rarity || item.rarity}</p></div><i>✦</i></button>`; }
-  if (item.type === 'event' && item.postRole === 'host-announcement' && db.events[item.eventId]?.gallery?.length) return eventFeedCarousel(item);
+  if (item.type === 'event' && item.imageIds?.length) return eventFeedCarousel(item);
   if (item.type === 'shop' && item.photoIds?.length) return `<button class="journey-media media-${item.media} bare wide" data-action="activity-detail" aria-label="Open ${item.title}"></button>`;
   if (item.type === 'shop') {
     const shop=db.shops[item.shopId] || db.shops.mana;
@@ -94,7 +102,11 @@ const compactSummary = (item) => {
   return `<div class="post-summary"><span><small>${item.game || 'VERSO'}</small><strong>${item.title}</strong></span>${badgeMarkup}</div>`;
 };
 
-const eventContext = (item) => item.type === 'event' ? `<div class="event-post-context"><span class="host-label">HOST</span><strong>${userById(item.authorUserId).name} created this event</strong><small>${(item.taggedUserIds || []).length} friends tagged · ${item.attendeeIds.length} going</small></div>` : '';
+const eventContext = (item) => {
+  if (item.type !== 'event') return '';
+  const event=db.events[item.eventId],author=userById(item.authorUserId),isHost=event?.hostId===author.id;
+  return `<div class="event-post-context"><span class="host-label">${isHost?'HOST':'POST'}</span><strong>${author.name} shared a moment from ${event.title}</strong><small>${isHost?'Event host · ':''}${(item.taggedUserIds || []).length} friends tagged · ${item.attendeeIds.length} going</small></div>`;
+};
 
 const renderActivityCard = (id) => {
   const item = activities[id];
@@ -118,7 +130,7 @@ const toast = (message) => {
 
 const panel = (title, subtitle, body, actions = '', variant = '') => `
   ${variant.includes('activity-detail-panel') ? '<button class="detail-backdrop" data-action="back" aria-label="Close activity detail"></button>' : ''}<section class="prototype-panel ${variant}" aria-label="${title}">
-    <header class="panel-bar"><button class="back-btn" data-action="back" aria-label="Back"><span>‹</span><b>Back</b></button><div><small>${subtitle}</small><h1>${title}</h1></div></header>
+    <header class="panel-bar"><button class="back-btn" data-action="back" aria-label="Back" title="Back"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg></button><div><small>${subtitle}</small><h1>${title}</h1></div></header>
     <div class="panel-content">${body}</div>${actions}
   </section>`;
 
@@ -182,11 +194,17 @@ const noticeContent = () => `
     <button data-action="activity-detail" data-activity="collect-alt-art"><span class="note-icon">✦</span><span><strong>Your collector post reached 200 likes.</strong><small>The chase card finally showed up · 1d</small></span></button>
   </div>`;
 
+const eventPostGallery = (item) => item.imageIds || item.gallery || [];
+
 const detailVisual = (item) => {
   if (item.type === 'match' && item.gallery?.length > 1) return `<div class="match-detail-carousel">${mediaCarousel(item)}</div>`;
   if (item.type === 'match' && item.media.startsWith('duel-')) return `<div class="activity-detail-visual detail-duel minimal-duel-graphic duel-${item.media.replace('duel-','')}"><span class="duel-grid"></span><span class="duel-card-back left"><i>V</i></span><b>VS</b><span class="duel-card-back right"><i>V</i></span><em>${item.game}</em></div>`;
   if (item.type === 'match') return `<div class="activity-detail-visual match-detail ${item.visual}"><span class="activity-photo-layer media-${item.media}"></span></div>`;
-  if (item.type === 'event') return `<div class="event-poster-detail event-poster-detail-v8">${eventPoster(item)}${item.gallery?.length?`<div class="event-detail-album"><small>EVENT ALBUM · ${item.gallery.length} PHOTOS</small>${mediaCarousel(item)}</div>`:''}</div>`;
+  if (item.type === 'event') {
+    const gallery=eventPostGallery(item);
+    if (gallery.length > 1) return `<div class="event-post-detail-media">${mediaCarousel({...item,gallery})}</div>`;
+    return `<button class="activity-detail-visual event-post-detail-media media-${gallery[0] || item.media}" data-action="gallery-open" data-index="0" aria-label="Open post photo"></button>`;
+  }
   if (item.type === 'badge') { const badge=db.badges[item.badgeId]; return `<div class="activity-detail-visual single-badge-detail">${badgeArtwork(badge,'detail-badge-art')}<div><small>${item.eyebrow}</small><strong>${badge?.name || item.title}</strong><p>${badge?.rarity || item.rarity}</p></div></div>`; }
   if (item.type === 'collect' && item.media === 'card-graphic') return `<div class="activity-detail-visual card-detail-graphic">${cardPullGraphic(item).replace('card-pull-graphic','card-pull-graphic detail-card-pull')}</div>`;
   if (item.type === 'collect' && item.gallery?.length > 1) return `<div class="collector-detail-media"><span class="collector-grade">${item.grade || 'COLLECTOR COPY'}</span>${mediaCarousel(item)}</div>`;
@@ -196,32 +214,49 @@ const detailVisual = (item) => {
 
 const detailAuthorHeader = (item) => item.type === 'match'
   ? `<header class="activity-page-author collab-detail-author"><span class="collab-avatars linked-avatars">${item.playerIds.map(userId=>userAvatarButton(userId)).join('')}</span><div><strong>${item.playerIds.map(userId=>`<button data-action="open-user" data-user-id="${userId}">${userById(userId).shortName}</button>`).join(' <i>×</i> ')}</strong><small>${item.time} · ${item.location}</small></div><span class="verified-pill">VERSO VERIFIED ✦</span></header>`
-  : (()=>{const user=userById(item.authorUserId);return `<header class="activity-page-author">${userAvatarButton(user.id)}<div><strong><button data-action="open-user" data-user-id="${user.id}">${user.name}</button></strong><small>${item.time} · ${item.location}</small></div><span class="verified-pill">VERSO VERIFIED ✦</span></header>`;})();
+  : (()=>{const user=userById(item.authorUserId);return `<header class="activity-page-author">${userAvatarButton(user.id)}<div><strong><button data-action="open-user" data-user-id="${user.id}">${user.name}</button></strong><small>${item.time} · ${item.location}</small></div><span class="verified-pill">${item.type==='event'?'USER POST · EVENT TAGGED':'VERSO VERIFIED ✦'}</span></header>`;})();
 
 const matchDeckDetail = (item) => `<section class="session-decks"><header><div><small>DECKS USED IN THIS SESSION</small><h2>Session loadout</h2></div><span>${item.sessionNo || 'VERIFIED'}</span></header><div>${item.deckIds.map((deckId,index)=>{const deck=db.decks[deckId];const owner=userById(deck.ownerId);return deck.public?`<button class="session-deck-card deck-${index?'b':'a'}" data-action="open-deck" data-deck-id="${deck.id}"><span class="deck-card-cover"><i>${deck.game}</i><b>${deck.name}</b><em>V</em></span><span><small>${owner.shortName}'S PUBLIC DECK</small><strong>${deck.name}</strong><p>${deck.sessions} sessions · ${deck.winRate}% win rate</p></span><em>›</em></button>`:`<div class="session-deck-card private-deck deck-${index?'b':'a'}"><span class="deck-card-cover"><i>${deck.game}</i><b>PRIVATE DECK</b><em>🔒</em></span><span><small>${owner.shortName}'S DECK</small><strong>Deck list private</strong><p>Session result remains public.</p></span></div>`}).join('')}</div></section>`;
 
-const earnedBadgeDetail = (item) => item.earnedBadgeIds?.length ? `<section class="session-earned"><small>EARNED FROM THIS SESSION</small><div>${item.earnedBadgeIds.map((badgeId)=>{const badge=db.badges[badgeId];return `<button data-action="open-badge" data-badge-id="${badgeId}">${badgeArtwork(badge,'mini')}<strong>${badge.name}</strong><i>${badge.rarity} · View badge</i></button>`;}).join('')}</div></section>` : '';
+const earnedBadgeDetail = (item) => item.earnedBadgeIds?.length ? `<section class="session-earned"><small>${item.type==='match'?'EARNED FROM THIS SESSION':'EARNED FROM THIS POST'}</small><div>${item.earnedBadgeIds.map((badgeId)=>{const badge=db.badges[badgeId];return `<button data-action="open-badge" data-badge-id="${badgeId}">${badgeArtwork(badge,'mini')}<strong>${badge.name}</strong><i>${badge.rarity} · View badge</i></button>`;}).join('')}</div></section>` : '';
 const activityComments = (item) => {
   const records=(item.commentIds||[]).map(commentId=>db.comments[commentId]).filter(Boolean);
   const fallback=[{id:'fallback',userId:'may',text:'This belongs in the story ✦',time:'now'}];
   return `<section class="comments comments-v19"><header><div><h2>Activity talk</h2><small>${records.length || 1} comments</small></div><button data-action="comment">＋ Add comment</button></header>${(records.length?records:fallback).map(comment=>{const user=userById(comment.userId);return `<article>${userAvatarButton(user.id)}<div><strong><button data-action="open-user" data-user-id="${user.id}">${user.name}</button><small>${comment.time}</small></strong><p>${comment.text}</p><footer><button data-action="like">♡ Like</button><button data-action="comment">Reply</button></footer></div></article>`}).join('')}<div class="comment-composer">${userAvatarButton('manny')}<button data-action="comment">Write a comment…</button></div></section>`;
 };
 
+const eventPostTaggedFriends = (item) => {
+  const tagged=(item.taggedUserIds || []).map(userById);
+  if (!tagged.length) return '';
+  return `<section class="event-post-tagged"><header><div><small>TAGGED IN THIS POST</small><h2>${tagged.length} friends</h2></div></header><div>${tagged.map(user=>`<button data-action="open-user" data-user-id="${user.id}" aria-label="Open ${user.name} profile">${userAvatarVisual(user.id)}<span><strong>${user.name}</strong><small>${user.handle}</small></span><i aria-hidden="true">›</i></button>`).join('')}</div></section>`;
+};
+
+const eventPostReference = (item) => {
+  const event=db.events[item.eventId],shop=db.shops[event.shopId],host=userById(event.hostId);
+  return `<section class="event-post-reference"><small>LINKED EVENT</small><button data-action="open-event" data-event-id="${event.id}" aria-label="View ${event.title} event"><span class="event-reference-date"><b>${event.date.split(' ')[0]}</b>${event.date.split(' ')[1]}</span><span><strong>${event.title}</strong><small>${event.date} · ${shop.name}</small><em>Hosted by ${host.name} · ${event.attendeeIds.length} going</em></span><b>View Event →</b></button></section>`;
+};
+
 const activityDetail = (id) => {
   const item = activities[id];
   if(!item)return panel('Activity unavailable','', '<p>This activity has been removed. Go back to your previous page.</p>');
+  const isEventPost=item.type==='event';
   const facts = item.type === 'match'
     ? [['FINAL SCORE',item.score],['TOTAL SESSION',item.duration],['GAME',item.game]]
-    : [['POSTED BY',item.author],['ACTIVITY',item.type.toUpperCase()],['LOCATION',item.location]];
-  return panel(item.title, `${item.time} · ${item.location}`, `
-    <article class="activity-page" data-activity="${id}">
+    : isEventPost
+      ? [['POSTED BY',item.author],['POST CONTEXT','USER MOMENT'],['LOCATION',item.location]]
+      : [['POSTED BY',item.author],['ACTIVITY',item.type.toUpperCase()],['LOCATION',item.location]];
+  const panelTitle=isEventPost?`Post by ${item.author}`:item.title;
+  const panelSubtitle=isEventPost?`${item.time} · EVENT-TAGGED POST`:`${item.time} · ${item.location}`;
+  return panel(panelTitle, panelSubtitle, `
+    <article class="activity-page ${isEventPost?'event-user-post-detail':''}" data-activity="${id}">
       ${detailAuthorHeader(item)}
+      ${isEventPost?`<div class="event-post-detail-intro"><small>USER POST</small><strong>${item.author} shared ${eventPostGallery(item).length>1?'photos':'a moment'} from ${item.title}</strong>${item.postRole==='host-announcement'?'<span>Event host</span>':''}</div>`:''}
       <div class="activity-page-facts">${facts.map(([label,value])=>`<span><small>${label}</small><strong>${value}</strong></span>`).join('')}</div>
       ${detailVisual(item)}
       <p class="activity-page-copy">${item.copy}</p>
       <div class="journey-achievement detail-achievement"><span>✦</span><strong>${item.achievement}</strong></div>
-      ${item.type === 'event' ? `<div class="event-going compact">${attendeeStack(item)}<span><strong>${item.people}</strong><small>${item.attendees.join(', ')}</small></span></div>` : ''}
-      ${item.type === 'event' ? `<div class="activity-event-tools"><button class="secondary" data-action="open-event" data-event-id="${item.eventId}">◇ Full event page</button><button class="secondary" data-action="open-shop" data-shop-id="${db.events[item.eventId].shopId}">⌂ Partner shop</button><button class="secondary" data-action="calendar">＋ Add to calendar</button></div>` : ''}
+      ${isEventPost ? eventPostTaggedFriends(item) : ''}
+      ${isEventPost ? eventPostReference(item) : ''}
       ${item.type === 'match' ? `<div class="activity-event-tools"><button class="secondary" data-action="open-shop" data-shop-id="${db.sessions[item.sessionId].shopId}">⌂ ${item.location}</button>${db.sessions[item.sessionId].eventId?`<button class="secondary" data-action="open-event" data-event-id="${db.sessions[item.sessionId].eventId}">◇ Linked event</button>`:''}</div>` : ''}
       ${item.type === 'shop' ? `<div class="activity-event-tools"><button class="secondary" data-action="open-shop" data-shop-id="${item.shopId}">⌂ Open partner shop page</button></div>` : ''}
       ${item.type === 'match' ? matchDeckDetail(item) : ''}
@@ -234,6 +269,16 @@ const activityDetail = (id) => {
 const explorePlayerCard = user => `<button class="explore-player-card" data-action="open-user" data-user-id="${user.id}" data-search-text="${user.name} ${user.handle} ${user.city} ${user.game} ${user.role}" aria-label="Open ${user.name} profile">${userAvatarVisual(user.id,'explore-avatar')}<span><strong>${user.name}</strong><small>${user.handle} · ${user.city}</small><i>${user.game}</i><em>${user.role}</em></span><b aria-hidden="true">›</b></button>`;
 const exploreShopCard = (shop,index=0) => { const cover=db.assets[shop.coverAssetId]?.path; return `<button class="explore-shop-card badge-style-${index%6}" data-action="open-shop" data-shop-id="${shop.id}" data-search-text="${shop.name} ${shop.city} ${shop.games.join(' ')}" aria-label="Open ${shop.name}"><span class="explore-shop-art" ${cover?.startsWith('public/')?`style="background-image:linear-gradient(0deg,#0b0b0cdd,#0b0b0c25),url('./${cover}')"`:''}><i>${shop.code}</i><b>VERSO PARTNER</b></span><span><strong>${shop.name}</strong><small>⌖ ${shop.city}</small><i>${shop.games.join(' · ')}</i></span><b aria-hidden="true">›</b></button>`; };
 const exploreEventCard = event => { const shop=db.shops[event.shopId],host=userById(event.hostId); return `<button class="explore-event-card" data-action="open-event" data-event-id="${event.id}" data-search-text="${event.title} ${event.game} ${shop.name} ${shop.city} ${host.name}" aria-label="Open ${event.title}"><span class="explore-event-poster" style="background-image:linear-gradient(0deg,#09090be8,#09090b18),url('./public/assets/${event.posterAsset}')"><small>${event.game}</small><strong>${event.posterCode}</strong></span><span><small>${event.date}</small><strong>${event.title}</strong><i>${shop.name} · ${shop.city}</i><em>${event.attendeeIds.length} going · Hosted by ${host.shortName}</em></span><b aria-hidden="true">›</b></button>`; };
+const exploreNearbyMarkup = () => {
+  const nearbyUsers=[['manny','1.2 km'],['may','2.6 km'],['bam','3.1 km']];
+  const nearbyShops=[['mana','1.2 km'],['side','4.1 km'],['north','4.8 km']];
+  const upcomingEvents=['community','lorcana','regional'];
+  const playerRows=nearbyUsers.map(([id,distance])=>{const user=userById(id);return `<button class="nearby-row nearby-player" data-action="open-user" data-user-id="${user.id}" aria-label="Open ${user.name} profile">${userAvatarVisual(user.id,'nearby-avatar')}<span><strong>${user.name}</strong><small>${user.game} · ${user.city}</small></span><em>${distance}</em><b aria-hidden="true">›</b></button>`;}).join('');
+  const shopRows=nearbyShops.map(([id,distance])=>{const shop=db.shops[id];return `<button class="nearby-row nearby-shop" data-action="open-shop" data-shop-id="${shop.id}" aria-label="Open ${shop.name}"><i class="nearby-mark">${shop.code}</i><span><strong>${shop.name}</strong><small>${shop.games.join(' · ')}</small></span><em>${distance}</em><b aria-hidden="true">›</b></button>`;}).join('');
+  const eventRows=upcomingEvents.map(id=>{const event=db.events[id],shop=db.shops[event.shopId],date=event.date.split(' · ')[0];return `<button class="nearby-row nearby-event" data-action="open-event" data-event-id="${event.id}" aria-label="Open ${event.title}"><i class="nearby-mark">${event.posterCode.split('-')[0]}</i><span><strong>${event.title}</strong><small>${shop.name} · ${event.attendeeIds.length} going</small></span><em>${date}</em><b aria-hidden="true">›</b></button>`;}).join('');
+  const group=(title,pane,rows)=>`<section class="nearby-group"><header><h2>${title}</h2><button data-action="explore-tab" data-pane="${pane}" aria-label="View all ${title.toLowerCase()}">View all →</button></header><div>${rows}</div></section>`;
+  return `<div class="explore-nearby" aria-label="Nearby discovery">${group('Nearby Players','players',playerRows)}${group('Nearby Partner Shops','shops',shopRows)}${group('Upcoming Events','events',eventRows)}</div>`;
+};
 const exploreSearchMarkup = query => {
   const q=query.trim().toLocaleLowerCase();
   const users=Object.values(db.users).filter(user=>`${user.name} ${user.handle} ${user.city} ${user.game} ${user.role}`.toLocaleLowerCase().includes(q));
@@ -254,14 +299,17 @@ const setExploreSearch = query => {
 const exploreScreen = () => panel('Explore', 'PLAYERS · SHOPS · EVENTS', `
     <label class="search-box explore-search"><span aria-hidden="true">⌕</span><input data-field="explore-search" type="search" aria-label="Search players, partner shops and events" placeholder="Search players, partner shops or events" autocomplete="off" /><button data-action="explore-search-clear" aria-label="Clear search" hidden>×</button></label>
     <div class="segment explore-tabs" role="tablist" aria-label="Explore categories"><button class="active" role="tab" aria-selected="true" data-action="explore-tab" data-pane="map">Map</button><button role="tab" aria-selected="false" data-action="explore-tab" data-pane="players">Players</button><button role="tab" aria-selected="false" data-action="explore-tab" data-pane="shops">Partner Shops</button><button role="tab" aria-selected="false" data-action="explore-tab" data-pane="events">Events</button></div>
-    <section class="explore-map explore-pane active" data-explore-pane="map" aria-label="Mock map of nearby TCG activity">
-      <div class="map-roads"><i></i><i></i><i></i><i></i></div>
-      <button class="map-pin shop p1" data-action="open-shop" data-shop-id="mana"><span>⌂</span><b>Mana House</b><small>1.2 km</small></button>
-      <button class="map-pin battle p2" data-action="record"><span>VS</span><b>Open Battle</b><small>4 players</small></button>
-      <button class="map-pin shop p3" data-action="open-shop" data-shop-id="side"><span>⌂</span><b>Side Deck</b><small>4.1 km</small></button>
-      <button class="map-pin event p4" data-action="open-event" data-event-id="community"><span>◇</span><b>Community Night</b><small>${db.events.community.attendeeIds.length} going</small></button>
-      <span class="you-pin"><i class="avatar manny">Manny</i><b>You</b></span>
-      <div class="map-key"><span><i class="shop-dot"></i>Shop</span><span><i class="battle-dot"></i>Battle</span><span><i class="event-dot"></i>Event</span></div>
+    <section class="explore-pane explore-map-pane active" data-explore-pane="map">
+      <div class="explore-map active" aria-label="Mock map of nearby TCG activity">
+        <div class="map-roads"><i></i><i></i><i></i><i></i></div>
+        <button class="map-pin shop p1" data-action="open-shop" data-shop-id="mana"><span>⌂</span><b>Mana House</b><small>1.2 km</small></button>
+        <button class="map-pin battle p2" data-action="record"><span>VS</span><b>Open Battle</b><small>4 players</small></button>
+        <button class="map-pin shop p3" data-action="open-shop" data-shop-id="side"><span>⌂</span><b>Side Deck</b><small>4.1 km</small></button>
+        <button class="map-pin event p4" data-action="open-event" data-event-id="community"><span>◇</span><b>Community Night</b><small>${db.events.community.attendeeIds.length} going</small></button>
+        <span class="you-pin"><i class="avatar manny">Manny</i><b>You</b></span>
+        <div class="map-key"><span><i class="shop-dot"></i>Shop</span><span><i class="battle-dot"></i>Battle</span><span><i class="event-dot"></i>Event</span></div>
+      </div>
+      ${exploreNearbyMarkup()}
     </section>
     <section class="explore-pane explore-directory" data-explore-pane="players"><header><div><small>DISCOVER PLAYERS</small><h2>Players around the community</h2></div><span>${Object.keys(db.users).length} profiles</span></header><div class="explore-player-grid">${Object.values(db.users).map(explorePlayerCard).join('')}</div></section>
     <section class="explore-pane explore-directory" data-explore-pane="shops"><header><div><small>VERSO NETWORK</small><h2>Partner Shops</h2></div><span>${Object.keys(db.partnerShops).length} locations</span></header><div class="explore-shop-grid">${Object.values(db.partnerShops).map(exploreShopCard).join('')}</div></section>
@@ -369,6 +417,11 @@ const userSessionActivityIds = userId => db.activityIdsFor(userId);
 const userDecks = (userId) => Object.values(db.decks).filter(deck=>deck.ownerId===userId);
 const userEventIds = (userId) => Object.values(db.events).filter(event=>event.hostId===userId || event.attendeeIds.includes(userId)).map(event=>event.id);
 const profileTabs = (active) => [['overview','Overview'],['sessions','Sessions'],['passport','Passport'],['decks','Decks'],['badges','Badges'],['listings','Listings']].map(([key,label])=>`<button class="${active===key?'active':''}" data-action="profile-tab" data-tab="${key}">${label}</button>`).join('');
+const profileActionsMarkup = (user, own) => {
+  if (own) return `<button class="profile-action-button" data-action="edit-profile" title="Edit profile" aria-label="Edit profile">${profileActionIcon('edit')}<b>Edit Profile</b></button><button class="profile-action-button qr-btn" data-action="profile-qr" title="QR code" aria-label="QR code">${profileActionIcon('qr')}<b>QR Code</b></button><button class="profile-action-button" data-screen="settings" title="Settings" aria-label="Settings">${profileActionIcon('settings')}<b>Settings</b></button>`;
+  const following=db.preferences.following.includes(user.id);
+  return `<div class="profile-follow-control">${following?`<button class="profile-follow-button is-following" data-action="follow-menu" aria-expanded="false">${profileActionIcon('following')}<b>Following</b><span>✓</span></button>`:`<button class="profile-follow-button is-follow primary" data-action="follow">${profileActionIcon('follow')}<b>Follow</b></button>`}</div>`;
+};
 
 function profileBody(userId, active) {
   const user=userById(userId),sessionIds=userSessionActivityIds(userId),decksForUser=userDecks(userId),eventIds=userEventIds(userId);
@@ -404,7 +457,7 @@ function profileBody(userId, active) {
 function profileScreen(userId = 'manny', active = 'overview') {
   const user=userById(userId),sessionIds=userSessionActivityIds(user.id),decksForUser=userDecks(user.id),eventsForUser=userEventIds(user.id),own=user.id==='manny';
   const xp=user.xp,level=Math.max(1,Math.floor(xp/250)),progress=xp%250;
-  return panel('Profile', `${user.name.toUpperCase()} · ${user.city.toUpperCase()}`, `<div class="profile-identity-block profile-v19"><div class="profile-hero">${userAvatarVisual(user.id,'xl')}<div class="profile-main-copy"><small>${user.handle.toUpperCase()} · ${user.city.toUpperCase()}</small><h2>${user.name}</h2><p>${user.bio}</p></div><div class="profile-actions polished-actions">${own?'<button data-action="edit-profile" title="Edit profile" aria-label="Edit profile"><span>✎</span></button><button class="qr-btn" data-action="profile-qr" title="Share profile QR" aria-label="Share profile QR"><span>▦</span></button><button data-screen="settings" title="Settings" aria-label="Settings"><span>⚙</span></button>':`<button class="primary" data-action="follow">${db.preferences.following.includes(user.id)?'Following ✓':'＋ Follow'}</button>`}</div></div><section class="profile-level"><span>LV. ${level}</span><div><small>XP FROM SESSIONS + BADGES</small><strong>${user.levelName}</strong><div class="progress"><i style="width:${Math.round(progress/250*100)}%"></i></div><p>${xp.toLocaleString()} XP · ${sessionIds.length} Sessions + ${user.badgeIds.length} Badges</p></div><b>✦</b></section>${statRow([[String(sessionIds.length),'sessions'],[String(eventsForUser.length),'events'],[String(decksForUser.length),'decks'],[String(user.badgeIds.length),'badges'],[String(user.albumPhotoIds.length),'photos']])}</div><div class="segment profile-subnav">${profileTabs(active)}</div>${profileBody(user.id,active)}`, '', 'profile-layout-panel');
+  return panel('Profile', `${user.name.toUpperCase()} · ${user.city.toUpperCase()}`, `<div class="profile-identity-block profile-v19"><div class="profile-hero">${userAvatarVisual(user.id,'xl')}<div class="profile-main-copy"><small>${user.handle.toUpperCase()} · ${user.city.toUpperCase()}</small><h2>${user.name}</h2><p>${user.bio}</p></div><div class="profile-actions polished-actions">${profileActionsMarkup(user,own)}</div></div><section class="profile-level"><span>LV. ${level}</span><div><small>XP FROM SESSIONS + BADGES</small><strong>${user.levelName}</strong><div class="progress"><i style="width:${Math.round(progress/250*100)}%"></i></div><p>${xp.toLocaleString()} XP · ${sessionIds.length} Sessions + ${user.badgeIds.length} Badges</p></div><b>✦</b></section>${statRow([[String(sessionIds.length),'sessions'],[String(eventsForUser.length),'events'],[String(decksForUser.length),'decks'],[String(user.badgeIds.length),'badges'],[String(user.albumPhotoIds.length),'photos']])}</div><div class="segment profile-subnav">${profileTabs(active)}</div>${profileBody(user.id,active)}`, '', 'profile-layout-panel');
 }
 
 screens['profile-sessions'] = () => profileScreen(state.currentUserId, 'sessions');
@@ -568,11 +621,11 @@ const profileQrModal = () => `<div class="scrim"><section class="share-modal pro
 
 const notificationPopover = () => `<div class="notice-layer"><button class="notice-backdrop" data-action="close-notice" aria-label="Close notifications"></button><section class="notice-popover" role="dialog" aria-label="Notifications"><header><div><small>6 NEW</small><h2><span class="bell-icon">●</span> Notifications</h2></div><button data-action="close-notice" aria-label="Close notifications">×</button></header>${noticeContent()}</section></div>`;
 
-const homepageMockup = () => `<div class="entry-gate verso-homepage login-only-home public-gate-v194"><header><span class="brand-guide-logo"></span><small>PRIVATE TCG COMMUNITY</small></header><main><section class="landing-copy"><small>VERSO</small><h1>Where Your<br><em>TCG Story</em> Lives.</h1><p>One connected place for every match, card, person, shop and event that matters to your journey.</p><h2>Play. Collect. Connect.</h2><div class="landing-auth-actions"><button class="primary" data-action="open-login">Log In →</button><button class="secondary" data-action="create-account">Create Account</button></div><small class="login-required-note">LOGIN REQUIRED · COMMUNITY PROFILES ARE NOT PUBLIC</small></section><section class="landing-visual abstract-landing-visual" aria-label="VERSO connected card journey"><div class="landing-orbit"><span class="welcome-mascot-badge mascot-pose-cheer"></span><i></i><i></i><i></i></div><p>EVERY GAME.<br>EVERY CARD.<br>EVERY STORY.</p></section><section class="landing-principles"><span><i>V</i><b>PLAY</b><small>Record the game.</small></span><span><i>✦</i><b>COLLECT</b><small>Remember the chase.</small></span><span><i>⌁</i><b>CONNECT</b><small>Find your people.</small></span></section></main><footer>VERSO · TCG LIFESTYLE &amp; CULTURE<span>ENTER THROUGH LOGIN ONLY</span></footer></div>`;
+const homepageMockup = () => `<div class="entry-gate verso-homepage login-only-home public-gate-v194 logged-out-home-v1911"><header><span class="brand-guide-logo"></span><small>TCG LIFESTYLE &amp; CULTURE PLATFORM</small></header><main><section class="landing-copy"><small>VERSO</small><h1>Where Your<br><em>TCG Story</em> Lives.</h1><p>Your matches, cards, shops, events and memories—together in one connected TCG journey.</p><h2>Play. Collect. Connect.</h2><div class="landing-auth-actions"><button class="primary" data-action="open-login">Log In →</button><button class="secondary" data-action="create-account">Create Account</button></div><small class="login-required-note">LOGIN REQUIRED · COMMUNITY PROFILES ARE NOT PUBLIC</small></section><section class="landing-visual abstract-landing-visual" aria-label="Verso Spirit welcomes players to VERSO"><div class="landing-orbit" aria-hidden="true"><i></i><i></i><i></i></div><div class="landing-spirit-hero"><span class="welcome-mascot-badge mascot-pose-cheer" role="img" aria-label="Verso Spirit cheering"></span><div><small>VERSO SPIRIT</small><strong>Ready for your next story.</strong></div></div><p>EVERY GAME.<br>EVERY CARD.<br>EVERY STORY.</p></section><section class="landing-principles" aria-label="What you can do on VERSO"><span><i>V</i><b>PLAY</b><small>Record matches, sessions and competitive moments.</small></span><span><i>✦</i><b>COLLECT</b><small>Track cards, decks, badges and your TCG journey.</small></span><span><i>⌁</i><b>CONNECT</b><small>Discover players, partner shops, events and communities.</small></span></section></main><footer>VERSO · TCG LIFESTYLE &amp; CULTURE<span>YOUR STORY STARTS AT THE TABLE</span></footer></div>`;
 
 const createAccountMockup = () => `<div class="entry-gate login-page create-account-page"><section class="login-brand-panel"><span class="brand-guide-logo"></span><div class="welcome-mascot-badge mascot-pose-peek"></div><small>NEW PLAYER PROFILE</small><h1>Start your<br>TCG story.</h1><p>This prototype creates a preview account and keeps the canonical V1.9.4 data untouched.</p></section><section class="login-form-panel"><button class="login-close" data-action="open-landing" aria-label="Back to homepage">×</button><div><small>CREATE ACCOUNT</small><h2>Join VERSO</h2><label>Display name<input value="New Player" /></label><label>Email<input type="email" placeholder="you@example.com" /></label><label>Home city<input value="Chiang Mai" /></label><button class="primary login-submit" data-action="enter-app">Create prototype account →</button><p>Already have a profile? <button data-action="open-login">Log in</button></p></div></section></div>`;
 
-const loginMockup = () => `<div class="entry-gate login-page"><section class="login-brand-panel"><span class="brand-guide-logo"></span><div class="welcome-mascot-badge mascot-pose-card"></div><small>YOUR TCG STORY IS WAITING</small><h1>Come back to<br>the table.</h1><p>Sessions, pulls, people, and places—all connected to your VERSO profile.</p></section><section class="login-form-panel"><button class="login-close" data-action="open-landing" aria-label="Back to homepage">×</button><div><small>WELCOME BACK</small><h2>Sign in to VERSO</h2><p>Prototype login—any details will continue.</p><label>Email or username<input type="email" value="manny@verso.app" /></label><label>Password<input type="password" value="versostory" /></label><div class="login-meta"><label><input type="checkbox" checked /> Remember me</label><button>Forgot password?</button></div><button class="primary login-submit" data-action="login-submit">Sign in →</button><span class="login-divider">OR CONTINUE WITH</span><div class="login-social"><button>G Google</button><button>◉ Apple</button></div><p>New to the table? <button data-action="enter-app">Create a prototype account</button></p></div></section></div>`;
+const loginMockup = () => `<div class="entry-gate login-page login-polished"><section class="login-brand-panel"><header class="login-brand-top"><span class="brand-guide-logo"></span><small>TCG LIFESTYLE &amp; CULTURE</small></header><div class="login-brand-composition"><div class="login-hero-copy"><small>VERSO</small><h1>Where Your<br><em>TCG Story</em> Lives.</h1><h2>Play. Collect. Connect.</h2><p>Your matches, cards, shops, events and memories—together in one journey.</p></div><div class="login-spirit-stage"><span class="welcome-mascot-badge mascot-pose-card" role="img" aria-label="Verso Spirit holding a card"></span><small>VERSO SPIRIT · READY FOR YOUR NEXT STORY</small></div></div></section><section class="login-form-panel"><button class="login-close" data-action="open-landing" aria-label="Back to homepage">×</button><div class="login-form-card"><small>WELCOME BACK</small><h2>Sign in to VERSO</h2><p>Continue your TCG journey and reconnect with your community.</p><label>Email or username<input type="email" value="manny@verso.app" /></label><label>Password<input type="password" value="versostory" /></label><div class="login-meta"><label><input type="checkbox" checked /> Remember me</label><button>Forgot password?</button></div><button class="primary login-submit" data-action="login-submit">Log In →</button><span class="login-divider">OR CONTINUE WITH</span><div class="login-social"><button>G&nbsp; Google</button><button>◉&nbsp; Apple</button></div><div class="login-create-account"><span>New to the table?</span><button class="secondary" data-action="enter-app">Create Account</button></div></div></section></div>`;
 
 const welcomeModal = () => `<div class="scrim welcome-scrim"><section class="welcome-modal"><span class="brand-guide-logo welcome-logo"></span><span class="welcome-mascot-badge mascot-pose-cheer" role="img" aria-label="VERSO Spirit cheering"></span><p>TINY MISCHIEF. BIG LOVE FOR THE GAME.</p><h2>Good evening, Manny!</h2><span>There’s always room for one more match, pull, place, or person in your story.</span><button class="primary" data-action="welcome-close">Let’s play →</button><small>PLAY. COLLECT. CONNECT.</small></section></div>`;
 
@@ -674,6 +727,7 @@ document.addEventListener('click', async (event) => {
   const screenNode = target.closest('[data-screen]');
   const activityCard = target.closest('[data-activity]');
   if (!target.closest('.session-actions-popover') && actionNode?.dataset.action !== 'session-menu') document.querySelectorAll('.session-actions-popover').forEach(menu=>menu.remove());
+  if (!target.closest('.profile-follow-control')) document.querySelectorAll('.profile-follow-menu').forEach(menu=>menu.remove());
   if (screenNode) {
     event.preventDefault();
     if (activityCard?.classList.contains('activity-card')) openActivity(activityCard.dataset.activity);
@@ -683,6 +737,7 @@ document.addEventListener('click', async (event) => {
   if (!actionNode) {
     const commentButton = target.closest('.activity-actions button');
     if (commentButton?.querySelector('span')?.textContent === '◯') toast('Comments opened (prototype)');
+    else if (activityCard?.classList.contains('activity-card') && activities[activityCard.dataset.activity]?.type === 'event') openActivity(activityCard.dataset.activity);
     return;
   }
   const action = actionNode.dataset.action;
@@ -806,7 +861,7 @@ document.addEventListener('click', async (event) => {
     const pane=actionNode.dataset.pane;
     const search=overlay.querySelector('[data-field="explore-search"]');
     if(search)search.value='';
-    overlay.querySelectorAll('[data-action="explore-tab"]').forEach(button=>{const selected=button===actionNode;button.classList.toggle('active',selected);button.setAttribute('aria-selected',String(selected));});
+    overlay.querySelectorAll('[data-action="explore-tab"]').forEach(button=>{const selected=button.dataset.pane===pane;button.classList.toggle('active',selected);if(button.getAttribute('role')==='tab')button.setAttribute('aria-selected',String(selected));});
     overlay.querySelectorAll('[data-explore-pane]').forEach(section=>{const selected=section.dataset.explorePane===pane;section.classList.toggle('active',selected);section.hidden=!selected;});
     setExploreSearch('');
     overlay.querySelector('.prototype-panel')?.scrollTo({top:0,behavior:'auto'});
@@ -844,7 +899,8 @@ document.addEventListener('click', async (event) => {
     const id = activityCard?.dataset.activity || state.currentActivity;
     state.currentActivity = id;
     const item = activities[id];
-    if (item?.gallery?.length) setOverlay(galleryViewer(item, Number(actionNode.dataset.index || 0)), `gallery:${id}`);
+    const gallery=item?.type==='event'?eventPostGallery(item):item?.gallery;
+    if (gallery?.length) setOverlay(galleryViewer({...item,gallery}, Number(actionNode.dataset.index || 0)), `gallery:${id}`);
   }
   if (action === 'gallery-prev' || action === 'gallery-next') {
     const current = Number(document.querySelector('.gallery-stage')?.dataset.galleryIndex || 0);
@@ -891,7 +947,19 @@ document.addEventListener('click', async (event) => {
   if(action==='post-comment'){db.addComment(state.currentActivity,escapeText(overlay.querySelector('[data-field="comment"]').value));setOverlay(commentsScreen(state.currentActivity),`comments:${state.currentActivity}`,false);renderFeedActivities();}
   if(action==='edit-profile')setOverlay(editProfileScreen(),'edit-profile');
   if(action==='save-profile'){db.users.manny.name=escapeText(overlay.querySelector('[data-field="profile-name"]').value.trim()||'Manny S.');db.users.manny.bio=escapeText(overlay.querySelector('[data-field="profile-bio"]').value.trim());db.persist();goBack();renderFeedActivities();}
-  if(action==='follow'){const id=state.currentView.startsWith('shop')?`shop:${state.currentShopId}`:state.currentUserId;const list=db.preferences.following,index=list.indexOf(id);if(index>=0)list.splice(index,1);else list.push(id);db.persist();actionNode.textContent=index<0?'Following ✓':'＋ Follow';}
+  if(action==='follow-menu'){
+    const control=actionNode.closest('.profile-follow-control'),existing=control.querySelector('.profile-follow-menu');
+    if(existing){existing.remove();actionNode.setAttribute('aria-expanded','false');}
+    else{control.insertAdjacentHTML('beforeend',`<div class="profile-follow-menu" role="menu"><button data-action="unfollow-user">${profileActionIcon('unfollow')}<b>Unfollow</b></button></div>`);actionNode.setAttribute('aria-expanded','true');}
+  }
+  if(action==='unfollow-user'){
+    const list=db.preferences.following,index=list.indexOf(state.currentUserId);if(index>=0)list.splice(index,1);db.persist();refreshProfile();toast(`Unfollowed ${userById(state.currentUserId).name}`);
+  }
+  if(action==='follow'){
+    const shop=state.currentView.startsWith('shop'),id=shop?`shop:${state.currentShopId}`:state.currentUserId,list=db.preferences.following,index=list.indexOf(id);
+    if(index<0)list.push(id);else list.splice(index,1);db.persist();
+    if(shop)actionNode.textContent=index<0?'Following ✓':'＋ Follow';else{refreshProfile();toast(index<0?`Following ${userById(id).name}`:`Unfollowed ${userById(id).name}`);}
+  }
   if (action === 'join') { db.joinEvent(state.currentEventId);setOverlay(eventScreen(state.currentEventId),`event:${state.currentEventId}`,false);renderFeedActivities();toast('You are on the guest list'); }
   if (action === 'save-event') {if(!db.preferences.savedEvents.includes(state.currentEventId))db.preferences.savedEvents.push(state.currentEventId);db.persist();actionNode.textContent='Saved ✓';toast('Event saved');}
   if(action==='calendar')toast(`${db.events[activities[state.currentActivity]?.eventId || state.currentEventId]?.date || ''} · Calendar preview only; no calendar was changed`);
